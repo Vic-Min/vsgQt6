@@ -1,0 +1,3 @@
+add_subdirectory(vsgqtmultiviewer)
+add_subdirectory(vsgqtviewer)
+add_subdirectory(vsgqtwindows)
