@@ -4,8 +4,13 @@
 include(GNUInstallDirs)
 
 # Set paths
-set(SPIRV-Tools_DIR ${CMAKE_CURRENT_BINARY_DIR}/glslang-install/SPIRV-Tools/cmake CACHE PATH "" FORCE)
-set(SPIRV-Tools-opt_DIR ${CMAKE_CURRENT_BINARY_DIR}/glslang-install/SPIRV-Tools-opt/cmake CACHE PATH "" FORCE)
+if(APPLE)
+    set(SPIRV-Tools_DIR ${CMAKE_CURRENT_BINARY_DIR}/glslang-install/lib/cmake/SPIRV-Tools CACHE PATH "" FORCE)
+    set(SPIRV-Tools-opt_DIR ${CMAKE_CURRENT_BINARY_DIR}/glslang-install/lib/cmake/SPIRV-Tools-opt CACHE PATH "" FORCE)
+else()
+    set(SPIRV-Tools_DIR ${CMAKE_CURRENT_BINARY_DIR}/glslang-install/SPIRV-Tools/cmake CACHE PATH "" FORCE)
+    set(SPIRV-Tools-opt_DIR ${CMAKE_CURRENT_BINARY_DIR}/glslang-install/SPIRV-Tools-opt/cmake CACHE PATH "" FORCE)
+endif()
 set(glslang_DIR ${CMAKE_CURRENT_BINARY_DIR}/glslang-install/${CMAKE_INSTALL_LIBDIR}/cmake/glslang CACHE PATH "" FORCE)
 
 set(GLSLANG_REQUIRED_VERSION 14.3.0)
@@ -13,7 +18,7 @@ set(GLSLANG_REQUIRED_VERSION 14.3.0)
 # Skip if it's already installed
 find_package(glslang ${GLSLANG_REQUIRED_VERSION})
 
-if((NOT ${glslang_FOUND}) OR ())
+if(NOT ${glslang_FOUND})
     message("[glslang-wrapper message]: glslang was not found - fetching and building.")
 
     include(FetchContent)
@@ -27,13 +32,13 @@ if((NOT ${glslang_FOUND}) OR ())
         GIT_PROGRESS TRUE
         FIND_PACKAGE_ARGS
     )
-    FetchContent_Populate(glslang)
+    FetchContent_MakeAvailable(glslang)
     message("glslang_SOURCE_DIR=${glslang_SOURCE_DIR}")
     message("glslang_BINARY_DIR=${glslang_BINARY_DIR}")
 
     message("[glslang-wrapper message]: Running update_glslang_sources.py...")
     execute_process(
-        COMMAND python update_glslang_sources.py
+        COMMAND python3 update_glslang_sources.py
         WORKING_DIRECTORY ${glslang_SOURCE_DIR}
     )
 
