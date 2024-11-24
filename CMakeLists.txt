@@ -71,6 +71,10 @@ if(WIN32)
 endif()
 
 add_subdirectory(src/vsgQt6)
-add_subdirectory(examples)
+
+option(VSGQT6_BUILD_EXAMPLES "Build Examples. Defaults to ON." ON)
+if(VSGQT6_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 
 vsg_add_feature_summary()
