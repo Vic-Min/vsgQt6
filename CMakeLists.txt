@@ -8,7 +8,7 @@ project(vsgQt6
 set(VSGQT6_SOVERSION 3)
 set(VSGQT6_RELEASE_CANDIDATE 0)
 
-set( "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Root source directory of vsgQt6")
+set(VSGQT6_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Root source directory of vsgQt6")
 set(VSGQT6_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE INTERNAL "Root binary directory of vsgQt6")
 
 # set the use of C++17 globally as all examples require it

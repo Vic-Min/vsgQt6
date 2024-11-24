@@ -22,19 +22,26 @@ git clone https://github.com/vsg-dev/vsgQt6.git
 
 * [VulkanSDK](https://www.lunarg.com/vulkan-sdk/) version 1.1.70 or later
 * [VulkanSceneGraph](https://github.com/vsg-dev/VulkanSceneGraph) master, 1.0.8 or later.
-* [CMake](https://cmake.org/) version 3.7 or later
-* [Qt](https://www.qt.io/) version 5 or later
+* [CMake](https://cmake.org/) version 3.10 or later
+* [Qt](https://www.qt.io/) version 6 or later
 * C++17 capable compiler
 
 ## Building vsgQt6
 
 ~~~ sh
 cd vsgQt6
-cmake .
-make -j 8
+mkdir build && cd build
+cmake ..
+cmake --build . -j8
 ~~~
 
 ## Examples
+
+~~~ sh
+./bin/vsgqtviewer <3D MODEL FILEPATH>
+./bin/vsgqtmultiviewer <3D MODEL FILEPATH>
+./bin/vsgqtwindows <3D MODEL FILEPATH>
+~~~
 
 * [vsgqtviewer](examples/vsgqtviewer/main.cpp) - example of single QApplication/QMainWindow usage with single vsgQt6::Viewer.
 * [vsgqtmultiviewer](examples/vsgqtmultiviewer/main.cpp) - example of QWindow usage with multiple vsgQt6::Viewer in the same QWindow.
