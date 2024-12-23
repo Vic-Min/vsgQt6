@@ -36,12 +36,16 @@ set(SOURCES
     KeyboardMap.cpp
     Window.cpp
     Viewer.cpp
+    Window_QQuickWindow.cpp
+    Widget.cpp
 )
 
 set(HEADERS
     ../../include/vsgQt6/KeyboardMap.h
     ../../include/vsgQt6/Window.h
     ../../include/vsgQt6/Viewer.h
+    ../../include/vsgQt6/Window_QQuickWindow.h
+    ../../include/vsgQt6/Widget.h
 )
 
 # shared mode is automatically chosen by setting BUILD_SHARED_LIBS=ON
@@ -68,7 +72,10 @@ target_include_directories(vsgQt6
 )
 target_link_libraries(vsgQt6
     PUBLIC
+        ${QT_PACKAGE_NAME}::Gui
         ${QT_PACKAGE_NAME}::Widgets
+        ${QT_PACKAGE_NAME}::Quick
+        ${QT_PACKAGE_NAME}::QuickWidgets
         vsg::vsg
 )
 

@@ -30,7 +30,7 @@ vsg_setup_build_vars()
 find_package(vsgXchange) # only used by examples
 
 # if Qt5 then we need 5.10 or later
-find_package(${QT_PACKAGE_NAME} COMPONENTS Widgets REQUIRED)
+find_package(${QT_PACKAGE_NAME} COMPONENTS Widgets Quick QuickWidgets REQUIRED)
 
 vsg_add_target_clang_format(
     FILES

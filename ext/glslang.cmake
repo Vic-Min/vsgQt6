@@ -3,15 +3,16 @@
 
 include(GNUInstallDirs)
 
+set(GLSLANG_INSTALL_DIR "${CMAKE_FIND_PACKAGE_REDIRECTS_DIR}/glslang")
+
 # Set paths
 if(APPLE)
-    set(SPIRV-Tools_DIR ${CMAKE_CURRENT_BINARY_DIR}/glslang-install/lib/cmake/SPIRV-Tools CACHE PATH "" FORCE)
-    set(SPIRV-Tools-opt_DIR ${CMAKE_CURRENT_BINARY_DIR}/glslang-install/lib/cmake/SPIRV-Tools-opt CACHE PATH "" FORCE)
+    set(SPIRV-Tools_DIR ${GLSLANG_INSTALL_DIR}/lib/cmake/SPIRV-Tools CACHE PATH "" FORCE)
+    set(SPIRV-Tools-opt_DIR ${GLSLANG_INSTALL_DIR}/lib/cmake/SPIRV-Tools-opt CACHE PATH "" FORCE)
 else()
-    set(SPIRV-Tools_DIR ${CMAKE_CURRENT_BINARY_DIR}/glslang-install/SPIRV-Tools/cmake CACHE PATH "" FORCE)
-    set(SPIRV-Tools-opt_DIR ${CMAKE_CURRENT_BINARY_DIR}/glslang-install/SPIRV-Tools-opt/cmake CACHE PATH "" FORCE)
+    set(SPIRV-Tools_DIR ${GLSLANG_INSTALL_DIR}/SPIRV-Tools/cmake CACHE PATH "" FORCE)
+    set(SPIRV-Tools-opt_DIR ${GLSLANG_INSTALL_DIR}/SPIRV-Tools-opt/cmake CACHE PATH "" FORCE)
 endif()
-set(glslang_DIR ${CMAKE_CURRENT_BINARY_DIR}/glslang-install/${CMAKE_INSTALL_LIBDIR}/cmake/glslang CACHE PATH "" FORCE)
 
 set(GLSLANG_REQUIRED_VERSION 14.3.0)
 
@@ -30,9 +31,11 @@ if(NOT ${glslang_FOUND})
         GIT_REPOSITORY "https://github.com/KhronosGroup/glslang.git"
         GIT_TAG "4a9f08891540263e19c2468dd602ffdd8c446390" # Use this commit (version 14.3) until VSG updates against glslang 15
         GIT_PROGRESS TRUE
-        FIND_PACKAGE_ARGS
     )
-    FetchContent_MakeAvailable(glslang)
+    FetchContent_GetProperties(glslang)
+    if (NOT glslang_POPULATED)
+        FetchContent_Populate(glslang)
+    endif()
     message("glslang_SOURCE_DIR=${glslang_SOURCE_DIR}")
     message("glslang_BINARY_DIR=${glslang_BINARY_DIR}")
 
@@ -54,17 +57,17 @@ if(NOT ${glslang_FOUND})
         COMMAND ${CMAKE_COMMAND} --build . -j16 --config ${CMAKE_BUILD_TYPE}
         WORKING_DIRECTORY ${glslang_BINARY_DIR}
     )
-    message("[glslang-wrapper message]: Installing glslang to ${CMAKE_CURRENT_BINARY_DIR}/glslang-install")
+
+    message("[glslang-wrapper message]: Installing glslang to ${GLSLANG_INSTALL_DIR}")
     # Install it
     execute_process(
-        COMMAND ${CMAKE_COMMAND} --install . --prefix ${CMAKE_CURRENT_BINARY_DIR}/glslang-install --config ${CMAKE_BUILD_TYPE}
+        COMMAND ${CMAKE_COMMAND} --install . --prefix ${GLSLANG_INSTALL_DIR} --config ${CMAKE_BUILD_TYPE}
         WORKING_DIRECTORY ${glslang_BINARY_DIR}
     )
 
-    set(glslang_DIR ${CMAKE_CURRENT_BINARY_DIR}/glslang-install/${CMAKE_INSTALL_LIBDIR}/cmake/glslang CACHE PATH "" FORCE)
     find_package(glslang ${GLSLANG_REQUIRED_VERSION})
 else()
-    message("[glslang-wrapper message]: glslang found. If you have reason to think that it might be out-of-date, delete ${CMAKE_CURRENT_BINARY_DIR}/glslang-install and re-run cmake.")
+    message("[glslang-wrapper message]: glslang found. If you have reason to think that it might be out-of-date, delete ${GLSLANG_INSTALL_DIR} and re-run cmake.")
 endif()
 
 message("* glslang_DIR=${glslang_DIR}")
